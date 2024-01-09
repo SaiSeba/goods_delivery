@@ -1,6 +1,7 @@
 package goods;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,6 +12,10 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.font.TextAttribute;
+import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -32,8 +37,24 @@ public class LoginPage extends JFrame implements ActionListener {
          emailLabel.setFont(new Font("Serif", Font.PLAIN, 13));
          passwordLabel = new JLabel("Password :");
          passwordLabel.setFont(new Font("Serif", Font.PLAIN, 13));
-         
+         passwordLabel.setBorder(new EmptyBorder(10, 0, 0, 0)); 
          emailTextField = new JTextField(20);
+         donthaveLabel = new JLabel("Dont't have an account?.");
+         donthaveLabel.setFont(new Font("Serif", Font.PLAIN, 13));
+         donthaveLabel.setBorder(new EmptyBorder(10, 0, 0, 0)); // top,left,bottom,right
+         registerLabel = new JLabel("Register");
+         registerLabel.setFont(new Font("Serif", Font.PLAIN, 13));
+         Font font = registerLabel.getFont();
+         Map attributes = font.getAttributes();
+         attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+         registerLabel.setFont(font.deriveFont(attributes));
+         registerLabel.setForeground(Color.blue);
+         registerLabel.setBorder(new EmptyBorder(10, 10, 0, 0)); // top,left,bottom,right
+         registerLabel.addMouseListener(new MouseAdapter() {
+             public void mouseClicked(MouseEvent e) {
+            	 new RegisterPage();
+              }
+          });
          Dimension textFieldSize = new Dimension(200, 30); // Set the desired size
          emailTextField.setMaximumSize(textFieldSize);
          emailTextField.setPreferredSize(textFieldSize);
@@ -44,15 +65,16 @@ public class LoginPage extends JFrame implements ActionListener {
          passwordTextField.setMaximumSize(textFieldSize);
          passwordTextField.setPreferredSize(textFieldSize);
          passwordTextField.setMinimumSize(textFieldSize);
-         
-
+         JLabel emptyLabel = new JLabel("1");
+         emptyLabel.setBorder(new EmptyBorder(10, 0, 0, 0));
          loginButton = new JButton("Login");
          loginButton.addActionListener(e -> {
              // Your action listener code here
          });
          loginButton.setMargin(new Insets(5, 50, 5, 50));
          loginButton.setFocusPainted(false);
-
+         
+        
          JPanel panel = new JPanel(new GridBagLayout());
          GridBagConstraints gbc = new GridBagConstraints();
          gbc.gridx = 0;
@@ -84,17 +106,28 @@ public class LoginPage extends JFrame implements ActionListener {
          passwordGbc.gridy = 0;
          passwordGbc.anchor = GridBagConstraints.WEST;
          passwordPanel.add(passwordLabel, passwordGbc);
-
          passwordGbc.gridy = 1;
          passwordPanel.add(passwordTextField, passwordGbc);
-
          gbc.gridy = 3;
-         gbc.insets = new Insets(0, 0, 0, 0); // Set insets t
-         panel.add(passwordPanel, gbc);
-         
+         gbc.insets = new Insets(0, 0, 10, 0); // Set insets t
+         panel.add(passwordPanel, gbc);         
          gbc.gridy = 4;
          panel.add(loginButton, gbc);
+         gbc = new GridBagConstraints();
+         gbc.gridy = 5;
+         gbc.anchor = GridBagConstraints.CENTER;
+         panel.add(donthaveLabel,gbc);
+         GridBagConstraints registerGbc = new GridBagConstraints();
+         registerGbc.gridx = 0;
+         registerGbc.gridy = 5;
+         registerGbc.anchor = GridBagConstraints.CENTER;
+         JPanel labelPanel = new JPanel();
+         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.X_AXIS));
+         labelPanel.add(donthaveLabel);
+         labelPanel.add(Box.createGlue()); //creates space between the JLabels
+         labelPanel.add(registerLabel);
 
+         panel.add(labelPanel,registerGbc);
          frame.add(panel);
          frame.setTitle("Goods Delivery Application");
          frame.setSize(800, 460);
@@ -106,7 +139,11 @@ public class LoginPage extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub
+				if(e.getSource()==loginButton) {
+					
+				}
+				
 	}
 
 }
