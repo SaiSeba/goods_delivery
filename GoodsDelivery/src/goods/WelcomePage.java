@@ -19,13 +19,12 @@ public class WelcomePage extends JFrame implements ActionListener {
 	JButton loginbutton, registerbutton;
 
 	public WelcomePage() {
-		JFrame frame = new JFrame("Button Resize Example");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		titlelabel = new JLabel("Hello!");
 		titlelabel.setFont(new Font("Serif", Font.PLAIN, 40));
 		titlelabel.setBorder(new EmptyBorder(60, 0, 0, 0));// top,left,bottom,right
 		titlelabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		 frame.setLocationRelativeTo(null);
+		this.setLocationRelativeTo(null);
 		welcomelabel = new JLabel("Welcome to Goods Delivery Application");
 		welcomelabel.setFont(new Font("Serif", Font.PLAIN, 24));
 		welcomelabel.setBorder(new EmptyBorder(16, 0, 37, 0));// top,left,bottom,right
@@ -52,6 +51,7 @@ public class WelcomePage extends JFrame implements ActionListener {
 		panel.add(registerbutton);
 		this.setTitle("Goods Delivery Application");
 		this.setSize(800, 460);		
+		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 

@@ -9,24 +9,32 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.font.TextAttribute;
+import java.util.Map;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
-public class RegisterPage extends JFrame implements ActionListener{
-	JLabel titleLabel,emailLabel,passwordLabel,firstNameLabel,lastNameLabel,phoneNumberLabel,roleLabel,registrationNoLabel,capacityLabel,alreadyLable,loginLabel;
+public class RegisterPage extends JFrame  implements ActionListener{
+	JLabel titleLabel,emailLabel,passwordLabel,firstNameLabel,lastNameLabel,phoneNumberLabel,roleLabel,registrationNoLabel,capacityLabel,alreadyLabel,loginLabel;
     JTextField emailTextField,passwordTextField,firstNameTextField,lastNameTextField,phoneNumberTextField,registerationNoTextField,capacityTextField;
     JButton registerButton;
     String[] choices = { "Customer","Schedular", "Driver"};
     JComboBox<String> roleComboBox; 
 	public RegisterPage() {
-	   JFrame frame = new JFrame("Button Resize Example");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	 
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		 titleLabel = new JLabel("Get Started!");
          titleLabel.setFont(new Font("Serif", Font.PLAIN, 20));
          titleLabel.setBorder(new EmptyBorder(14, 0, 0, 0)); // top,left,bottom,right
@@ -54,6 +62,29 @@ public class RegisterPage extends JFrame implements ActionListener{
          
          capacityLabel = new JLabel("Capacity (in KG) :");
          capacityLabel.setFont(new Font("Serif", Font.PLAIN, 13));
+         
+         alreadyLabel = new JLabel("Already Registered?.");
+         alreadyLabel.setFont(new Font("Serif", Font.PLAIN, 13));
+         alreadyLabel.setBorder(new EmptyBorder(10, 0, 0, 0)); // top,left,bottom,right
+         loginLabel = new JLabel("Login");
+         loginLabel.setFont(new Font("Serif", Font.PLAIN, 13));
+         Font font = loginLabel.getFont();
+         Map attributes = font.getAttributes();
+         attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+         loginLabel.setFont(font.deriveFont(attributes));
+         loginLabel.setForeground(Color.blue);
+         loginLabel.setBorder(new EmptyBorder(10, 10, 0, 0)); // top,left,bottom,right
+         loginLabel.addMouseListener(new MouseAdapter() {
+             public void mouseClicked(MouseEvent e) {
+            	 SwingUtilities.invokeLater(() -> {
+            			//WelcomePage wecomePage = new WelcomePage();
+            			//new LoginPage();
+            		 new LoginPage();
+                	 closeWindow();
+            			});
+            	
+              }
+          });
          
          emailTextField = new JTextField(20); 
          Dimension textFieldSize = new Dimension(200, 30); // Set the desired size
@@ -102,9 +133,10 @@ public class RegisterPage extends JFrame implements ActionListener{
          gbc.gridx = 0;
          gbc.gridy = 0;
          gbc.anchor = GridBagConstraints.CENTER;
-         panel.add(titleLabel, gbc);
-
-       
+         gbc.gridwidth = 2;
+        // gbc.insets = new Insets(0, 0, 0, 0); // Set insets to zero
+         panel.add(titleLabel,gbc);
+         gbc.gridwidth = 1;
 
          // Create a new panel for email components with GridBagLayout
          JPanel emailPanel = new JPanel(new GridBagLayout());
@@ -116,7 +148,7 @@ public class RegisterPage extends JFrame implements ActionListener{
 
          emailGbc.gridy = 1;
          emailPanel.add(emailTextField, emailGbc);
-
+         gbc.gridx = 0;
          gbc.gridy = 2;
          gbc.insets = new Insets(0, 0, 0, 0); // Set insets to zero
          panel.add(emailPanel, gbc);
@@ -237,17 +269,58 @@ public class RegisterPage extends JFrame implements ActionListener{
          gbc.gridx = 0;
          gbc.gridy = 6;
          gbc.anchor = GridBagConstraints.CENTER;
-         panel.add(registerButton, gbc);
+         JPanel buttonPanel = new JPanel(new GridBagLayout());
+         GridBagConstraints buttonGbc = new GridBagConstraints();
+         buttonGbc.gridx = 1;
+         buttonGbc.gridy = 0;
+         gbc.gridwidth = 2;
+         gbc.insets = new Insets(20, 0, 0, 0); // Set insets to zero
+         buttonGbc.anchor = GridBagConstraints.CENTER;
+         buttonPanel.add(registerButton, buttonGbc);
+         panel.add(buttonPanel, gbc);   
+         gbc.gridwidth = 4;
          
-         frame.add(panel);
-         frame.setTitle("Goods Delivery Application");
-         frame.setSize(800, 460);		
-		frame.setVisible(true);
+         gbc = new GridBagConstraints();
+         gbc.gridx =0;
+         gbc.gridy = 7;
+         gbc.anchor = GridBagConstraints.CENTER;
+         JPanel alreadyPanel = new JPanel(new GridBagLayout());
+         GridBagConstraints alreadyGbc = new GridBagConstraints();
+         alreadyGbc.gridx = 1;
+         alreadyGbc.gridy = 0;
+         gbc.gridwidth = 4;
+         gbc.insets = new Insets(0, 0, 0, 0); // Set in
+         buttonPanel.add(alreadyLabel, alreadyGbc);
+         panel.add(alreadyPanel,gbc);
+         GridBagConstraints registerGbc = new GridBagConstraints();
+         gbc = new GridBagConstraints();
+         registerGbc.gridx =0;
+         registerGbc.gridy = 7;
+         registerGbc.anchor = GridBagConstraints.CENTER;
+         JPanel labelPanel = new JPanel();
+         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.X_AXIS));
+         labelPanel.add(alreadyLabel);
+         labelPanel.add(Box.createGlue()); //creates space between the JLabels
+         labelPanel.add(loginLabel);
+         gbc.gridx =1;
+         gbc.gridy = 7;
+         gbc.gridwidth = 2;
+         panel.add(loginLabel,gbc);
+         gbc.gridwidth = 1;
+         this.add(panel);
+         this.setTitle("Goods Delivery Application");
+         this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+         this.setSize(800, 460);		
+         this.setLocationRelativeTo(null);
+         this.setVisible(true);
    }
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	public void closeWindow() {
+		this.dispose();
 	}
 
 }

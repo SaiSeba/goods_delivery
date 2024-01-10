@@ -1,11 +1,16 @@
 package goods;
 
+import javax.swing.SwingUtilities;
+
 public class Main {
 
 	public static void main(String[] args) {
+		SwingUtilities.invokeLater(() -> {
 		//WelcomePage wecomePage = new WelcomePage();
 		//new LoginPage();
-		new RegisterPage();
+			RegisterPage registerPage=new RegisterPage();
+		registerPage.setVisible(true);
+		});
 	}
 
 }
