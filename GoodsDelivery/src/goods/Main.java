@@ -8,8 +8,10 @@ public class Main {
 		SwingUtilities.invokeLater(() -> {
 		//WelcomePage wecomePage = new WelcomePage();
 		//new LoginPage();
-			RegisterPage registerPage=new RegisterPage();
-		registerPage.setVisible(true);
+//			RegisterPage registerPage=new RegisterPage();
+//		registerPage.setVisible(true);
+			HomePage homePage=	new HomePage();
+			homePage.setVisible(true);
 		});
 	}
 
