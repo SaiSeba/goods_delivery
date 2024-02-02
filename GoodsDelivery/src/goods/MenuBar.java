@@ -7,7 +7,7 @@ import javax.swing.*;
 
 public class MenuBar extends JMenuBar implements ActionListener {
 	JMenu homeMenu, profileMenu, routeOverviewMenu, driverOverviewMenu, missionsHistoryMenu, missionsMenu, logoutMenu;
-	JMenuItem viewProfile, editProfile, viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport;
+	JMenuItem viewProfile, editProfile, viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport,logout;
 	Box horizontalBox;
 	
 	HomePage frame;
@@ -27,16 +27,20 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		viewProfile = new JMenuItem("View Profile");
 		editProfile = new JMenuItem("Edit Profile");
 		generateReport = new JMenuItem("Generate Report");
+		logout=new JMenuItem("Logout");
 		createOrders.addActionListener(this);
 		editProfile.addActionListener(this);
+		logout.addActionListener(this);
 		homeMenu.add(createOrders);
         profileMenu.add(editProfile);
+        
 //        ordersMenu.add(createOrders);
 //        ordersMenu.add(viewOrders);
 //        missionOverviewMenu.add(generateReport);
 //        driversMenu.add(viewDeliverables);
 //        driversMenu.add(completeDeliverable);
 		logoutMenu = new JMenu("Logout");
+		logoutMenu.add(logout);
 		add(homeMenu);
 		add(profileMenu);
 		if (from != "Customer") {
@@ -57,10 +61,17 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		} else if (e.getSource()==editProfile) {
 			// Switch to Page 2
 			frame.switchToPage(frame.profileCustomerPanel);
+		} else if (e.getSource()==logout) {
+			OfflineDB offlineDB = new OfflineDB();
+			offlineDB.saveLoginStatus(false);
+			new LoginPage();
+			closeWindow();
 		}
-
 		// Repaint the frame to reflect the changes
 		revalidate();
 		repaint();
+	}
+	public void closeWindow() {
+		frame.dispose();
 	}
 }

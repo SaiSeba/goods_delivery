@@ -15,13 +15,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
+import java.sql.SQLException;
 import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import controller.DBManagement;
+import controller.Toast;
+
 public class LoginPage extends JFrame implements ActionListener {
-	JLabel titleLabel, subTitleLabel, emailLabel, passwordLabel, donthaveLabel, registerLabel;
+	JLabel titleLabel, subTitleLabel, emailLabel, passwordLabel, donthaveLabel, registerLabel, errorEmailLabel,
+			errorPasswordLabel;
 	JTextField emailTextField, passwordTextField;
 	JButton loginButton;
 
@@ -44,6 +49,12 @@ public class LoginPage extends JFrame implements ActionListener {
 		donthaveLabel.setBorder(new EmptyBorder(10, 0, 0, 0)); // top,left,bottom,right
 		registerLabel = new JLabel("Register");
 		registerLabel.setFont(new Font("Serif", Font.PLAIN, 13));
+		errorEmailLabel = new JLabel("");
+		errorEmailLabel.setFont(new Font("Serif", Font.PLAIN, 11));
+		errorEmailLabel.setForeground(Color.red);
+		errorPasswordLabel = new JLabel("");
+		errorPasswordLabel.setFont(new Font("Serif", Font.PLAIN, 11));
+		errorPasswordLabel.setForeground(Color.red);
 		Font font = registerLabel.getFont();
 		Map attributes = font.getAttributes();
 		attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
@@ -100,7 +111,9 @@ public class LoginPage extends JFrame implements ActionListener {
 
 		emailGbc.gridy = 1;
 		emailPanel.add(emailTextField, emailGbc);
-
+		emailGbc.gridy = 2;
+		errorEmailLabel.setVisible(false);
+		emailPanel.add(errorEmailLabel, emailGbc);
 		gbc.gridy = 2;
 		gbc.insets = new Insets(0, 0, 0, 0); // Set insets to zero
 		panel.add(emailPanel, gbc);
@@ -113,6 +126,9 @@ public class LoginPage extends JFrame implements ActionListener {
 		passwordPanel.add(passwordLabel, passwordGbc);
 		passwordGbc.gridy = 1;
 		passwordPanel.add(passwordTextField, passwordGbc);
+		passwordGbc.gridy = 2;
+		errorPasswordLabel.setVisible(false);
+		passwordPanel.add(errorPasswordLabel, passwordGbc);
 		gbc.gridy = 3;
 		gbc.insets = new Insets(0, 0, 10, 0); // Set insets t
 		panel.add(passwordPanel, gbc);
@@ -146,13 +162,46 @@ public class LoginPage extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
 		if (e.getSource() == loginButton) {
-			SwingUtilities.invokeLater(() -> {
-				// WelcomePage wecomePage = new WelcomePage();
-				// new LoginPage();
-				new HomePage();
-				closeWindow();
-			});
+			if (emailTextField.getText().trim().equals("")) {
+				errorEmailLabel.setText("Email is required");
+				errorEmailLabel.setVisible(true);
+			} else {
+				errorEmailLabel.setVisible(false);
+			}
+			if (passwordTextField.getText().trim().equals("")) {
+				errorPasswordLabel.setText("Password is required");
+				errorPasswordLabel.setVisible(true);
+			} else {
+				errorPasswordLabel.setVisible(false);
+			}
+			if (!emailTextField.getText().trim().equals("") && !passwordTextField.getText().trim().equals("")) {
+				errorEmailLabel.setVisible(false);
+				errorPasswordLabel.setVisible(false);
+				SwingUtilities.invokeLater(() -> {
+					// WelcomePage wecomePage = new WelcomePage();
+					// new LoginPage();
 
+					DBManagement dbManagement = new DBManagement();
+					try {
+						String email = emailTextField.getText();
+						String password = passwordTextField.getText();
+						if (dbManagement.checkLogin(email, password)) {
+							OfflineDB offlineDB = new OfflineDB();
+							offlineDB.saveLoginStatus(true);
+							
+							new HomePage();
+							closeWindow();
+						} else {
+							Toast t = new Toast("Email and Password are wrong", 150, 400);
+							t.showtoast();
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				});
+
+			}
 		}
 
 	}

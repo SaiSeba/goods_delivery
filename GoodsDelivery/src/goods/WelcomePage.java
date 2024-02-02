@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 public class WelcomePage extends JFrame implements ActionListener {
-	JLabel titlelabel, welcomelabel,emptyLabel;
+	JLabel titlelabel, welcomelabel, emptyLabel;
 	JButton loginbutton, registerbutton;
 
 	public WelcomePage() {
@@ -31,18 +31,18 @@ public class WelcomePage extends JFrame implements ActionListener {
 		welcomelabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		loginbutton = new JButton("Login");
 		loginbutton.addActionListener(this);
-		loginbutton.setMargin( new Insets(5, 50, 5, 50) );
+		loginbutton.setMargin(new Insets(5, 50, 5, 50));
 		loginbutton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		loginbutton.setFocusPainted(false);
 		emptyLabel = new JLabel("");
 		emptyLabel.setBorder(new EmptyBorder(0, 0, 20, 0));
 		registerbutton = new JButton("Register");
 		registerbutton.addActionListener(this);
-		registerbutton.setMargin( new Insets(5, 42, 5, 42) );
+		registerbutton.setMargin(new Insets(5, 42, 5, 42));
 		registerbutton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		registerbutton.setFocusPainted(false);
 		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));		
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		this.add(panel);
 		panel.add(titlelabel);
 		panel.add(welcomelabel);
@@ -50,7 +50,7 @@ public class WelcomePage extends JFrame implements ActionListener {
 		panel.add(emptyLabel);
 		panel.add(registerbutton);
 		this.setTitle("Goods Delivery Application");
-		this.setSize(800, 460);		
+		this.setSize(800, 460);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
@@ -58,13 +58,18 @@ public class WelcomePage extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource()==loginbutton) {
+		if (e.getSource() == loginbutton) {
 			new LoginPage();
+			closeWindow();
 		}
-		if(e.getSource()==registerbutton) {
-			
+		if (e.getSource() == registerbutton) {
+			new RegisterPage();
+			closeWindow();
 		}
 
 	}
 
+	public void closeWindow() {
+		this.dispose();
+	}
 }

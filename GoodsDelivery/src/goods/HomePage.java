@@ -1,5 +1,6 @@
 package goods;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -42,6 +43,7 @@ public class HomePage extends JFrame implements ActionListener {
 		this.add(panel);
 		this.setTitle("Goods Delivery Application");
 		this.setSize(800, 460);
+		 getContentPane().setBackground(Color.WHITE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}

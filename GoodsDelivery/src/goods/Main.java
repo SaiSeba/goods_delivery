@@ -6,12 +6,18 @@ public class Main {
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
-		//WelcomePage wecomePage = new WelcomePage();
-		//new LoginPage();
+			OfflineDB offlineDB = new OfflineDB();
+			if (!offlineDB.loadLoginStatus()) {
+				new WelcomePage();
+			} else {
+				HomePage homePage = new HomePage();
+				homePage.setVisible(true);
+			}
+			// new LoginPage();
 //			RegisterPage registerPage=new RegisterPage();
 //		registerPage.setVisible(true);
-			HomePage homePage=	new HomePage();
-			homePage.setVisible(true);
+//			HomePage homePage=	new HomePage();
+//			homePage.setVisible(true);
 		});
 	}
 
