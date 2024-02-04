@@ -318,15 +318,15 @@ public class CustomerProfilePage extends JPanel implements ActionListener {
 		phoneNumberTextField.setText(usersList.getPhoneNumber());
 		registerationNoTextField.setText(usersList.getRegNumber());
 		capacityTextField.setText(String.valueOf(usersList.getCapacity()));
-		if(usersList.getRole()=="Customer") {			
+		if(usersList.getRole().contains("Customer")) {			
 			roleComboBox.setSelectedIndex(0);
 			registrationNumberPanel.setVisible(false);
 			capacityPanel.setVisible(false);
-		}else if(usersList.getRole()=="Schedular") {
+		}else if(usersList.getRole().contains("Schedular")) {
 			roleComboBox.setSelectedIndex(1);
 			registrationNumberPanel.setVisible(false);
 			capacityPanel.setVisible(false);
-		}else if(usersList.getRole()=="Driver") {
+		}else if(usersList.getRole().contains("Driver")) {
 			roleComboBox.setSelectedIndex(2);
 			registrationNumberPanel.setVisible(true);
 			capacityPanel.setVisible(true);

@@ -2,6 +2,7 @@ package controller;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import goods.OfflineDB;
+import model.NewOrder;
+import model.OrderProduct;
 import model.ProductList;
 import model.UsersList;
 
@@ -140,22 +143,80 @@ public class DBManagement {
 		Statement stmt = conn.createStatement();
 		OfflineDB offlineDB = new OfflineDB();
 		// 3. Prepare The Query
-		String sql = "update registration SET "
-				+ "email='" + usersList.getEmail() + "',password= '" + usersList.getPassword() + "',firstname= '" + usersList.getFirstName()
-				+ "',lastname= '" + usersList.getLastName() + "',phonenumber= '" + usersList.getPhoneNumber() + "',role= '" + usersList.getRole()
-				+ "',regnumber= '" + usersList.getRegNumber() + "',capacity= " + usersList.getCapacity() + "" + " where id="
-				+ offlineDB.loadLoginId() + "";
+		String sql = "update registration SET " + "email='" + usersList.getEmail() + "',password= '"
+				+ usersList.getPassword() + "',firstname= '" + usersList.getFirstName() + "',lastname= '"
+				+ usersList.getLastName() + "',phonenumber= '" + usersList.getPhoneNumber() + "',role= '"
+				+ usersList.getRole() + "',regnumber= '" + usersList.getRegNumber() + "',capacity= "
+				+ usersList.getCapacity() + "" + " where id=" + offlineDB.loadLoginId() + "";
 		System.out.println(sql);
 		// 4. Execute The Query
 		stmt.executeUpdate(sql);
-		//ResultSet rs = stmt.executeQuery(sql);
+		// ResultSet rs = stmt.executeQuery(sql);
 		System.out.println("1 row affected.");
-		//while (rs.next()) {
-			check = true;
+		// while (rs.next()) {
+		check = true;
 
-		//}
+		// }
 		// 5. Close the connection
 		conn.close();
 		return check;
 	}
+
+	public int newOrderIntoDB(NewOrder newOrder) throws SQLException {
+		int newId = 0;
+		System.out.println("Inserting DATA");
+		String url = "jdbc:MySQL://localhost:3306/";
+		String dbname = "goodsdelivery";
+		String user = "root";
+		String password = "root";
+		// 1. Create the connection
+		Connection conn = DriverManager.getConnection(url + dbname, user, password);
+		// 2. Create The statement
+		Statement stmt = conn.createStatement();
+		// 3. Prepare The Query
+		String sql = "insert neworder (deliverydate,address,status,userid) VALUES ( " + "'" + newOrder.getDeliveryDate()
+				+ "', '" + newOrder.getAddress() + "', '" + newOrder.getStatus() + "', " + newOrder.getUserID() + ")";
+		PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+		// 4. Execute The Query
+		ps.executeUpdate();
+		ResultSet rs = ps.getGeneratedKeys();
+		if (rs.next()) {
+			newId = rs.getInt(1);
+		}
+		System.out.println("1 row affected.");
+
+		// 5. Close the connection
+		conn.close();
+		return newId;
+	}
+
+	public int orderProductIntoDB(OrderProduct orderProduct) throws SQLException {
+		int status = 0;
+		System.out.println("Inserting DATA");
+		String url = "jdbc:MySQL://localhost:3306/";
+		String dbname = "goodsdelivery";
+		String user = "root";
+		String password = "root";
+		// 1. Create the connection
+		Connection conn = DriverManager.getConnection(url + dbname, user, password);
+		// 2. Create The statement
+		Statement stmt = conn.createStatement();
+		// 3. Prepare The Query
+		String sql = "insert orderproduct(quantity,orderid,productid) VALUES ( " + "" + orderProduct.getQuantity()
+				+ ", " + orderProduct.getOrderId() + ", " + orderProduct.getProductId() + ")";
+		// 4. Execute The Query
+		int count = stmt.executeUpdate(sql);
+		if (count > 0) {
+			status = 1;
+		} else {
+			status = 0;
+		}
+		System.out.println("1 row affected.");
+
+		// 5. Close the connection
+		conn.close();
+		return status;
+	}
+
 }

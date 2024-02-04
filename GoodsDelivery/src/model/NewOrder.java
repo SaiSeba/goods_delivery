@@ -1,47 +1,48 @@
 package model;
 
+import java.util.Date;
+
 public class NewOrder {
 	int orderid;
-	String deliverydate;
+	Date deliverydate;
 	String address;
-	String status;
+	int status;
 	int userid;
 
-	public NewOrder(int orderid, String deliverydate, String address, String status, int userid) {
-		this.orderid = orderid;
+	public NewOrder( Date deliverydate, String address, int status, int userid) {
 		this.deliverydate = deliverydate;
 		this.address = address;
 		this.status = status;
 		this.userid = userid;
 	}
-	int getOrderId() {
+	public int getOrderId() {
 		return this.orderid;
 	}
-	String getDeliveryDate() {
+	public Date getDeliveryDate() {
 		return this.deliverydate;
 	}
-	String getAddress() {
+	public String getAddress() {
 		return this.address;
 	}
-	String getStatus() {
+	public int getStatus() {
 		return this.status;
 	}
-	int getUserID() {
+	public int getUserID() {
 		return this.userid;
 	}
-	void setOrderID(int orderid) {
+	public void setOrderID(int orderid) {
 		this.orderid=orderid;
 	}
-	void setDeliveryDate(String deliverydate) {
+	public void setDeliveryDate(Date deliverydate) {
 		this.deliverydate=deliverydate;
 	}
-	void setAddress(String address) {
+	public void setAddress(String address) {
 		this.address=address;
 	}
-	void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status=status;
 	}
-	void setUserID(int userid) {
+	public void setUserID(int userid) {
 		this.userid=userid;
 	}
 	

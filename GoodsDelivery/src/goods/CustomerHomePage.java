@@ -8,6 +8,7 @@ import java.awt.event.FocusEvent;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -23,6 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -38,13 +40,15 @@ import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
 import controller.DBManagement;
+import model.NewOrder;
+import model.OrderProduct;
 import model.ProductList;
 
 public class CustomerHomePage extends JPanel implements ActionListener {
 	JLabel productLabel, deliveryDateLebel, weightLabel, addressLabel;
 	private DefaultListModel productListModel;
 	private JList<CustomPanel> productList;
-	JTextArea  addressTextField;
+	JTextArea addressTextField;
 	// TitledBorder titledBorder;
 	RoundedButton addBtn;
 	RoundedButton removeBtn;
@@ -52,9 +56,11 @@ public class CustomerHomePage extends JPanel implements ActionListener {
 	JPanel productPanel01;
 	JPanel buttonPanel;
 	ArrayList<JPanel> listPanel;
-	private javax.swing.JComboBox[] combo1;
 	JDateChooser deliveryDateTextField;
 	JButton confirmButton;
+	JComboBox<String> productBox;
+	List<ProductList> list;
+	JSpinner spinner;
 
 	public CustomerHomePage() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -204,15 +210,14 @@ public class CustomerHomePage extends JPanel implements ActionListener {
 //		addressTextField.setMaximumSize(textFieldSize);
 //		addressTextField.setPreferredSize(textFieldSize);
 //		addressTextField.setMinimumSize(textFieldSize);
-		
+
 		addressGbc = new GridBagConstraints();
 		addressGbc.gridx = 1;
 		addressGbc.gridy = 0;
 		addressGbc.anchor = GridBagConstraints.WEST;
 		addressGbc.insets = new Insets(0, 10, 10, 10);
 		addressPanel.add(new JScrollPane(addressTextField), addressGbc);
-		
-		
+
 		GridBagConstraints gbc01 = new GridBagConstraints();
 		gbc01.gridx = 0;
 		gbc01.gridy = 1;
@@ -225,13 +230,12 @@ public class CustomerHomePage extends JPanel implements ActionListener {
 
 		panel.add(deliveryPanel, gbc);
 		addPanel();
-        
-		
+
 		confirmButton = new JButton("Confim Order");
 		confirmButton.addActionListener(this);
 		confirmButton.setMargin(new Insets(5, 50, 5, 50));
 		confirmButton.setFocusPainted(false);
-		 gbc = new GridBagConstraints();
+		gbc = new GridBagConstraints();
 		gbc.gridx = 4;
 		gbc.gridy = 0;
 		// gbc.weightx = 1.0;
@@ -286,9 +290,9 @@ public class CustomerHomePage extends JPanel implements ActionListener {
 		productPanel.setBorder(titledBorder);
 
 		DBManagement db = new DBManagement();
-		List<ProductList> list = new ArrayList<ProductList>();
+		list = new ArrayList<ProductList>();
 		;
-		JComboBox<String> productBox;
+
 		productBox = new JComboBox<String>();
 		try {
 			list = db.getProductList();
@@ -344,7 +348,7 @@ public class CustomerHomePage extends JPanel implements ActionListener {
 		weightGbc.gridx = 1;
 		SpinnerNumberModel sm = new SpinnerNumberModel(0, 0, 9, 1);
 		textFieldSize = new Dimension(80, 30); // Set the desired size
-		JSpinner spinner = new JSpinner(sm);
+		 spinner = new JSpinner(sm);
 		((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().setEditable(true);
 		spinner.setMaximumSize(textFieldSize);
 		spinner.setPreferredSize(textFieldSize);
@@ -417,7 +421,33 @@ public class CustomerHomePage extends JPanel implements ActionListener {
 		if (removeBtn == e.getSource()) {
 			removePanel();
 		}
-
+        if(confirmButton==e.getSource()) {
+        	DBManagement dbManagement = new DBManagement();
+        	OfflineDB offlineDB = new OfflineDB();
+        	Date deliverydate=deliveryDateTextField.getDate();
+        	String address=addressTextField.getText();
+        	int status=0;
+        	int userid=offlineDB.loadLoginId();
+        	NewOrder newOrder=new NewOrder(deliverydate,address,status,userid);
+        	try {
+			int orderID=	dbManagement.newOrderIntoDB(newOrder);
+			int quantity=(int) spinner.getValue();
+			  int productid=list.get( productBox.getSelectedIndex()).getId();
+			OrderProduct orderProduct=new OrderProduct(quantity,orderID,productid);
+			int check=dbManagement.orderProductIntoDB(orderProduct);
+			if(check==1) {
+				JOptionPane.showConfirmDialog(null, 
+		                "Thank for your order", "Confirm Message", JOptionPane.DEFAULT_OPTION);
+			}else {
+				JOptionPane.showConfirmDialog(null, 
+		                "Something went wrong", "Error!", JOptionPane.DEFAULT_OPTION);
+			}
+			System.out.println("order id "+orderID);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        }
 	}
 
 	private static class CustomPanel {

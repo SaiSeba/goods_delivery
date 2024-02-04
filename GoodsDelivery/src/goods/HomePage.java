@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -17,8 +18,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controller.DBManagement;
+import model.UsersList;
+
 public class HomePage extends JFrame implements ActionListener {
-	JPanel homeCustomerPanel, profileCustomerPanel;
+	JPanel homeCustomerPanel,homeSchedularPanel,profileCustomerPanel;
 
 	public HomePage() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,14 +34,40 @@ public class HomePage extends JFrame implements ActionListener {
 		gbc.weightx = 1.0;
 		gbc.weighty = 1.0;
 		JMenuBar menuBar = new JMenuBar();
-		menuBar.add(new MenuBar("Customer", this));
+		
+		
 		// Initialize the panels
 		homeCustomerPanel = new JPanel();
 		homeCustomerPanel.add(new CustomerHomePage());
-		profileCustomerPanel = new JPanel();
+		profileCustomerPanel=new JPanel();
 		profileCustomerPanel.add(new CustomerProfilePage());
-		// Set the default content to Page 1
-		setContentPane(homeCustomerPanel);
+		homeSchedularPanel=new JPanel();
+		homeCustomerPanel.add(new SchedulerHomePage());
+		DBManagement dbManagement = new DBManagement();
+		OfflineDB offlineDB = new OfflineDB();
+		UsersList usersList = null;
+		try {
+			usersList=dbManagement.getUserDetails(offlineDB.loadLoginId());
+			if(usersList.getRole().contains("Customer")) {	
+			    
+				// Set the default content to Page 1
+				setContentPane(homeCustomerPanel);
+				System.out.print("dkjdkjdkjddjdj");
+			}else if(usersList.getRole().contains("Schedular")) {
+				// Set the default content to Page 1
+				setContentPane(homeSchedularPanel);
+			}else if(usersList.getRole().contains("Driver")) {
+				// Set the default content to Page 1
+				setContentPane(homeCustomerPanel);
+			}
+			menuBar.add(new MenuBar(usersList.getRole(), this));
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		// gbc.insets = new Insets(0, 0, 0, 0); // Set insets to zero
 		this.setJMenuBar(menuBar);
 		this.add(panel);

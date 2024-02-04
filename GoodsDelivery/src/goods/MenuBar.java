@@ -7,9 +7,10 @@ import javax.swing.*;
 
 public class MenuBar extends JMenuBar implements ActionListener {
 	JMenu homeMenu, profileMenu, routeOverviewMenu, driverOverviewMenu, missionsHistoryMenu, missionsMenu, logoutMenu;
-	JMenuItem viewProfile, editProfile, viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport,logout;
+	JMenuItem viewProfile, editProfile, viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport,
+			logout;
 	Box horizontalBox;
-	
+
 	HomePage frame;
 
 	public MenuBar(String from, HomePage frame) {
@@ -27,13 +28,13 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		viewProfile = new JMenuItem("View Profile");
 		editProfile = new JMenuItem("Edit Profile");
 		generateReport = new JMenuItem("Generate Report");
-		logout=new JMenuItem("Logout");
+		logout = new JMenuItem("Logout");
 		createOrders.addActionListener(this);
 		editProfile.addActionListener(this);
 		logout.addActionListener(this);
-		homeMenu.add(createOrders);
-        profileMenu.add(editProfile);
-        
+
+		profileMenu.add(editProfile);
+
 //        ordersMenu.add(createOrders);
 //        ordersMenu.add(viewOrders);
 //        missionOverviewMenu.add(generateReport);
@@ -43,11 +44,16 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		logoutMenu.add(logout);
 		add(homeMenu);
 		add(profileMenu);
-		if (from != "Customer") {
+		System.out.print("dkjdkjdkjddjdjs,jsjsj" + from + "dd");
+		if (from.contains("Customer")) {
+			homeMenu.add(createOrders);
+		} else if (from.contains("Schedular")) {
 			add(routeOverviewMenu);
 			add(driverOverviewMenu);
+		} else if (from.contains("Driver")) {
 			add(missionsHistoryMenu);
 		}
+
 		add(logoutMenu);
 	}
 
@@ -55,13 +61,13 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		// Handle menu item clicks
-		if (e.getSource()==createOrders) {
+		if (e.getSource() == createOrders) {
 			// Switch to Page 1
 			frame.switchToPage(frame.homeCustomerPanel);
-		} else if (e.getSource()==editProfile) {
+		} else if (e.getSource() == editProfile) {
 			// Switch to Page 2
 			frame.switchToPage(frame.profileCustomerPanel);
-		} else if (e.getSource()==logout) {
+		} else if (e.getSource() == logout) {
 			OfflineDB offlineDB = new OfflineDB();
 			offlineDB.saveLoginStatus(false);
 			new LoginPage();
@@ -71,6 +77,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		revalidate();
 		repaint();
 	}
+
 	public void closeWindow() {
 		frame.dispose();
 	}
