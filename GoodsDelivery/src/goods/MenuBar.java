@@ -8,7 +8,7 @@ import javax.swing.*;
 public class MenuBar extends JMenuBar implements ActionListener {
 	JMenu homeMenu, profileMenu, routeOverviewMenu, driverOverviewMenu, missionsHistoryMenu, missionsMenu, logoutMenu;
 	JMenuItem viewProfile, editProfile, viewOrders, createOrders, viewDeliverables, completeDeliverable, generateReport,
-			logout;
+			logout,createSchedule,viewDriverList,viewRouteOverView,viewMisson,viewMissionHistory;
 	Box horizontalBox;
 
 	HomePage frame;
@@ -29,10 +29,19 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		editProfile = new JMenuItem("Edit Profile");
 		generateReport = new JMenuItem("Generate Report");
 		logout = new JMenuItem("Logout");
+		createSchedule= new JMenuItem("Create Schedule");
+		viewDriverList=new JMenuItem("View Driver List");
+		viewRouteOverView=new JMenuItem("View Route Overiew");
+		viewMisson=new JMenuItem("View Mission");
+		viewMissionHistory=new JMenuItem("View Mission History");
 		createOrders.addActionListener(this);
 		editProfile.addActionListener(this);
 		logout.addActionListener(this);
-
+		createSchedule.addActionListener(this);
+		viewDriverList.addActionListener(this);
+		viewRouteOverView.addActionListener(this);
+		viewMisson.addActionListener(this);
+		viewMissionHistory.addActionListener(this);
 		profileMenu.add(editProfile);
 
 //        ordersMenu.add(createOrders);
@@ -48,10 +57,18 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		if (from.contains("Customer")) {
 			homeMenu.add(createOrders);
 		} else if (from.contains("Schedular")) {
+			homeMenu.add(createSchedule);
+			driverOverviewMenu.add(viewDriverList);
+			routeOverviewMenu.add(viewRouteOverView);
 			add(routeOverviewMenu);
 			add(driverOverviewMenu);
+			//add(viewRouteOverView);
 		} else if (from.contains("Driver")) {
+			homeMenu.add(viewMisson);
+			//missionsMenu.add(viewMisson);
+			missionsHistoryMenu.add(viewMissionHistory);
 			add(missionsHistoryMenu);
+			
 		}
 
 		add(logoutMenu);
@@ -67,9 +84,23 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		} else if (e.getSource() == editProfile) {
 			// Switch to Page 2
 			frame.switchToPage(frame.profileCustomerPanel);
-		} else if (e.getSource() == logout) {
+		}else if(e.getSource()==createSchedule) {
+			System.out.println("hjgdjdjhd");
+			frame.switchToPage(frame.homeSchedularPanel);
+		}else if(e.getSource()==viewDriverList) {
+			frame.switchToPage(frame.driverOverviewPanel);
+		}else if(e.getSource()==viewRouteOverView) {
+			frame.switchToPage(frame.routeOverviewPanel);
+		}else if(e.getSource()==viewMisson) {
+			frame.switchToPage(frame.homeDriverPanel);
+		}
+		else if(e.getSource()==viewMissionHistory) {
+			frame.switchToPage(frame.viewMissionHistory);
+		}
+	    else if (e.getSource() == logout) {
 			OfflineDB offlineDB = new OfflineDB();
 			offlineDB.saveLoginStatus(false);
+			offlineDB.saveLoginID(0);
 			new LoginPage();
 			closeWindow();
 		}

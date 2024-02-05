@@ -434,7 +434,7 @@ public class CustomerHomePage extends JPanel implements ActionListener {
 			int quantity=(int) spinner.getValue();
 			  int productid=list.get( productBox.getSelectedIndex()).getId();
 			OrderProduct orderProduct=new OrderProduct(quantity,orderID,productid);
-			int check=dbManagement.orderProductIntoDB(orderProduct);
+			int check=dbManagement.orderProductIntoDB(orderProduct,deliverydate);
 			if(check==1) {
 				JOptionPane.showConfirmDialog(null, 
 		                "Thank for your order", "Confirm Message", JOptionPane.DEFAULT_OPTION);

@@ -22,7 +22,7 @@ import controller.DBManagement;
 import model.UsersList;
 
 public class HomePage extends JFrame implements ActionListener {
-	JPanel homeCustomerPanel,homeSchedularPanel,profileCustomerPanel;
+	JPanel homeCustomerPanel,homeSchedularPanel,profileCustomerPanel,driverOverviewPanel,routeOverviewPanel,homeDriverPanel,viewMissionHistory;
 
 	public HomePage() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,7 +42,15 @@ public class HomePage extends JFrame implements ActionListener {
 		profileCustomerPanel=new JPanel();
 		profileCustomerPanel.add(new CustomerProfilePage());
 		homeSchedularPanel=new JPanel();
-		homeCustomerPanel.add(new SchedulerHomePage());
+		homeSchedularPanel.add(new SchedulerHomePage(this));
+		driverOverviewPanel=new JPanel();
+		driverOverviewPanel.add(new DriverOverviewPage());
+		routeOverviewPanel=new JPanel();
+		routeOverviewPanel.add(new RouteOverViewPage());
+		homeDriverPanel=new JPanel();
+		homeDriverPanel.add(new DriverHomePage(this));
+		viewMissionHistory=new JPanel();
+		viewMissionHistory.add(new MissionHistoryPage(this));
 		DBManagement dbManagement = new DBManagement();
 		OfflineDB offlineDB = new OfflineDB();
 		UsersList usersList = null;
@@ -56,9 +64,12 @@ public class HomePage extends JFrame implements ActionListener {
 			}else if(usersList.getRole().contains("Schedular")) {
 				// Set the default content to Page 1
 				setContentPane(homeSchedularPanel);
+				revalidate();
+				repaint();
+				System.out.print("dkjdkjdkjddjdj 0001 ");
 			}else if(usersList.getRole().contains("Driver")) {
 				// Set the default content to Page 1
-				setContentPane(homeCustomerPanel);
+				setContentPane(homeDriverPanel);
 			}
 			menuBar.add(new MenuBar(usersList.getRole(), this));
 			

@@ -4,21 +4,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,9 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
-import javax.swing.RowFilter.ComparisonType;
-import javax.swing.event.TableModelEvent;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -38,20 +30,21 @@ import com.toedter.calendar.JTextFieldDateEditor;
 
 import controller.DBManagement;
 import model.DeafultScheduleListModel;
+import model.DefaultMissionListModel;
 import model.ScheduleList;
 import model.UsersList;
 
-public class SchedulerHomePage extends JPanel implements ActionListener {
+public class MissionHistoryPage extends JPanel implements ActionListener {
 	// headers for the table
 	String[] columns = new String[] { "No", "Date", "Warehouse Address", "Goods", "Weight", "Schedule" };
 	JLabel productLabel;
 	JDateChooser deliveryDateTextField;
 	List<ScheduleList> list01 = new ArrayList<>();
 	List<ScheduleList> list = new ArrayList<>();
-	DeafultScheduleListModel model = new DeafultScheduleListModel();
+	DefaultMissionListModel model = new DefaultMissionListModel();
 	HomePage frame;
 	JPanel panel = new JPanel(new FlowLayout());
-	public SchedulerHomePage(HomePage frame) {
+	public MissionHistoryPage(HomePage frame) {
 		this.frame=frame;
 		this.setLayout(new FlowLayout());
 		// this.setLayout(new GridBagLayout());
